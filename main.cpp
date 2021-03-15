@@ -8,8 +8,7 @@
 #include <vector>
 #include <algorithm> 
 #include <string>
-#include <sstream>
-#include <ncurses.h>
+//#include <sstream>
 #include "sorting_algorithms.h"
 
 void copyNumbers();
@@ -22,14 +21,21 @@ std::fstream my_file,new_file;
 // std::string optarg_file_name;
 // std::string new_file_name;
 std::string before_file_init = "./",file_name,optarg_file_name,new_file_name,temp_string;
+// template <typename T>
+// std::vector<T> numbers;
+// template <typename T>
+// std::vector<T> temp_numbers;
 std::vector<float> numbers,temp_numbers;
+std::vector<std::string> strings,temp_strings;
 //std::vector<float> temp_numbers;
 //std::string temp_string;
+std::string opt_array;
 char seperator = '\n';
 float *my_list;
+std::string *my_string_list;
 std::vector<std::string> sorting_methods,sorting_definitons;
 char *token,*arr_token;
-bool save = false,is_file = false,is_definiton = false,is_array=false;
+bool save = false,is_file = false,is_definiton = false,is_arrayy=false, is_string = false;
 double beg_time;
 
 enum SortingMethods
@@ -59,46 +65,89 @@ SortingMethods resolveMethod(std::string input)
 }
 
 int printSorting(std::string method)
-{
+{    
      copyNumbers();
      beg_time = clock();
-     switch (resolveMethod(method))
+     int numbers_size;
+     if(is_string)
      {
-     case Selection:
-          selectionSort(my_list,numbers.size());
-          break;
-     case Bubble:
-          bubbleSort(my_list,numbers.size());
-          break;
-     case Insertion:
-          insertionSort(my_list,numbers.size());
-          break;
-     case Quick:
-          quickSort(my_list,0,numbers.size()-1);
-          break;
-     case Shell:
-          shellSort(my_list,numbers.size());
-          break;
-     case Heap:
-          heapSort(my_list,numbers.size());
-          break;
-     case Merge:
-          mergeSort(my_list,0,numbers.size()-1);
-          break;
-     case Bucket:
-          bucketSort(my_list,numbers.size());
-          break;
-     case InvalidMethod:
-          std::cout << "invalid sorting argument: " << method << "\n";
-          exit(EXIT_SUCCESS);
-          return 1;
+          numbers_size = strings.size();
+          switch (resolveMethod(method))
+          {
+          case Selection:
+               selectionSort(my_string_list,numbers_size);
+               break;
+          case Bubble:
+               bubbleSort(my_string_list,numbers_size);
+               break;
+          case Insertion:
+               insertionSort(my_string_list,numbers_size);
+               break;
+          case Quick:
+               quickSort(my_string_list,0,numbers_size-1);
+               break;
+          case Shell:
+               shellSort(my_string_list,numbers_size);
+               break;
+          case Heap:
+               heapSort(my_string_list,numbers_size);
+               break;
+          case Merge:
+               mergeSort(my_string_list,0,numbers_size-1);
+               break;
+          // case Bucket:
+          //      bucketSort(my_string_list,numbers_size);
+          //      break;
+          case InvalidMethod:
+               std::cout << "invalid sorting argument: " << method << "\n";
+               exit(EXIT_SUCCESS);
+               return 1;
+          }
      }
+     else
+     {
+          numbers_size = numbers.size();
+          switch (resolveMethod(method))
+          {
+          case Selection:
+               selectionSort(my_list,numbers_size);
+               break;
+          case Bubble:
+               bubbleSort(my_list,numbers_size);
+               break;
+          case Insertion:
+               insertionSort(my_list,numbers_size);
+               break;
+          case Quick:
+               quickSort(my_list,0,numbers_size-1);
+               break;
+          case Shell:
+               shellSort(my_list,numbers_size);
+               break;
+          case Heap:
+               heapSort(my_list,numbers_size);
+               break;
+          case Merge:
+               mergeSort(my_list,0,numbers_size-1);
+               break;
+          // case Bucket:
+          //      bucketSort(my_list,numbers_size);
+          //      break;
+          case InvalidMethod:
+               std::cout << "invalid sorting argument: " << method << "\n";
+               exit(EXIT_SUCCESS);
+               return 1;
+          }
+     }
+     
+     
      std::cout << "Total time elapsed for " << method << " sort: " << (double)(clock() - beg_time)/CLOCKS_PER_SEC << " seconds \n";
      return 0;
 }
 
 void getNumbers()
 {
+     int i = 0;
      try
      {
           file_name = before_file_init.append(optarg_file_name);
@@ -108,11 +157,26 @@ void getNumbers()
                std::cerr << "Cant read file " << optarg_file_name << " or it does not exist.\n";
                exit(EXIT_SUCCESS);
           }
-          while(getline(my_file,temp_string,seperator)){
+          if(is_string)
+          {
+               while(getline(my_file,temp_string,seperator)){
+               strings.push_back(temp_string);
+               temp_strings.push_back(temp_string);
+               }
+               std::cout << "got strings\n";
+               my_string_list = &temp_strings[0];
+               std::cout << "got pointer assignment\n";
+          }
+          else
+          {
+               while(getline(my_file,temp_string,seperator)){
                numbers.push_back(std::stof(temp_string));
                temp_numbers.push_back(std::stof(temp_string));
+               my_list = &temp_numbers[0];
           }
-          my_list = &temp_numbers[0];
+          }
+          
+          
           my_file.close();
      }
      catch(const char* msg)
@@ -120,14 +184,51 @@ void getNumbers()
           std::cerr << "Cant read file " << optarg_file_name << " or it does not exist.\n";
           exit(EXIT_SUCCESS);
      }
+     std::cout << "got numbers\n";
+}
+
+void getArray()
+{
+     arr_token = strtok(optarg,",");
+     if(is_string)
+     {
+          while(arr_token != NULL){
+          strings.push_back(arr_token);
+          temp_strings.push_back(arr_token);
+          arr_token = strtok(NULL, ",");
+          }
+          my_string_list = &temp_strings[0];
+     }
+     else
+     {
+          while(arr_token != NULL){
+          numbers.push_back(std::stof(arr_token));
+          temp_numbers.push_back(std::stof(arr_token));
+          arr_token = strtok(NULL, ",");
+          }
+          my_list = &temp_numbers[0];
+     }
+     
 }
 
 void copyNumbers()
 {
-     for(int i = 0; i < numbers.size(); i++)
+     int numbers_size;
+     if(is_string)
      {
-          temp_numbers[i] = numbers[i];
+          for(int i = 0; i < strings.size(); i++)
+          {
+               temp_strings[i] = strings[i];
+          }
      }
+     else
+     {
+          for(int i = 0; i < numbers.size(); i++)
+          {
+               temp_numbers[i] = numbers[i];
+          }
+     }
+     
 }
 
 
@@ -148,6 +249,7 @@ int main(int argc, char **argv)
               {"save", required_argument, 0, 6},
               {"detail", no_argument, 0, 7},
               {"definiton", no_argument, 0, 8},
+              {"string", no_argument, 0, 9},
               {0, 0, 0, 0}};
 
           c = getopt_long_only(argc, argv, ":a:bc:d:012",
@@ -163,12 +265,9 @@ int main(int argc, char **argv)
                optarg_file_name = optarg;
                break;
           case 3:
-               is_array = true;
-               arr_token = strtok(optarg,",");
-               while(arr_token != NULL){
-                    numbers.push_back(std::stof(arr_token));
-                    arr_token = strtok(NULL, ",");
-               }
+               is_arrayy = true;
+               opt_array = optarg;
+               
                break;
           case 4:
                seperator = optarg[0];
@@ -190,6 +289,9 @@ int main(int argc, char **argv)
                break;
           case 8:
                is_definiton = true;
+               break;
+          case 9:
+               is_string= true;
                break;
           case ':':
                std::cout << "option " << long_options[optind].name << " needs an argument\n";
@@ -218,24 +320,45 @@ int main(int argc, char **argv)
      {
           getNumbers();
      }
+     else if(is_arrayy)
+     {
+          getNumbers();
+     }
 
      for(int i = 0; i< sorting_methods.size(); i++)
      {
           if(printSorting(sorting_methods[i])) break;
      }
-
+     std::cout << "got print sorting\n";
      if(save)
      {
+          std::cout << "in save\n";
           try
           {
-               my_list = &numbers[0];
-               quickSort(my_list,0,numbers.size()-1);
-               new_file.open(new_file_name,std::ios::out);
-               for(int i = 0; i < numbers.size(); i++)
+               if(is_string)
                {
-                    new_file << numbers.at(i);
-                    new_file << seperator;
+                    std::cout << "in string\n";
+                    my_string_list = &strings[0];
+                    quickSort(my_string_list,0,strings.size()-1);
+                    new_file.open(new_file_name,std::ios::out);
+                    for(int i = 0; i < strings.size(); i++)
+                    {
+                         new_file << strings.at(i);
+                         new_file << seperator;
+                    }
                }
+               else
+               {
+                    my_list = &numbers[0];
+                    quickSort(my_list,0,numbers.size()-1);
+                    new_file.open(new_file_name,std::ios::out);
+                    for(int i = 0; i < numbers.size(); i++)
+                    {
+                         new_file << numbers.at(i);
+                         new_file << seperator;
+                    }
+               }
+               
                new_file.close();
           }
           catch(const char *msg)
@@ -243,7 +366,11 @@ int main(int argc, char **argv)
                std::cerr << "Cant open file " << new_file_name << "\n";
           }
      }
-     
-
+     std::cout << "allooooo\n";
+     //visTry();
+     startScreen();
+     getch();
+     endScreen();
+     //visTryEnd();
      exit(EXIT_SUCCESS);
 }
