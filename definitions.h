@@ -1,10 +1,128 @@
+#ifndef definitions
+#define definitions
 #include <iostream>
 #include <string>
-extern std::string bubble_definiton;
-extern std::string selection_definiton;
-extern std::string insertion_definiton;
-extern std::string quick_definiton;
-extern std::string heap_definiton;
-extern std::string shell_definiton;
-extern std::string merge_definiton;
+const std::string bubble_definiton = "Bubble sort, sometimes referred to as sinking sort, is a simple sorting\n"
+"algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in \n"
+"the wrong order. The pass through the list is repeated until the list is sorted. The algorithm, which is a\n"
+"comparison sort, is named for the way smaller or larger elements bubble to the top of the list.\n"
+"\n"
+"This simple algorithm performs poorly in real world use and is used primarily as an educational tool.\n"
+"\n"
+"Worst-case time complexity: O(n²)\n";
 
+const std::string selection_definiton = "The selection sort algorithm sorts an array by repeatedly finding\n"
+"the minimum element (considering ascending order) from unsorted\n"
+"part and putting it at the beginning. The algorithm maintains two subarrays in a given array.\n"
+"\n"
+"1) The subarray which is already sorted.\n"
+"2) Remaining subarray which is unsorted.\n"
+"\n"
+"In every iteration of selection sort, the minimum element (considering ascending order) from the unsorted\n"
+"subarray is picked and moved to the sorted subarray.\n"
+"\n"
+"Worst-case time complexity: O(n²)\n";
+
+const std::string insertion_definiton = "Insertion sort is a simple sorting algorithm that works similar to the\n"
+"way you sort playing cards in your hands. The array is\n"
+"virtually split into a sorted and an unsorted part. Values from the unsorted part are picked and placed at the\n"
+"correct position in the sorted part.\n"
+"\n"
+"Algorithm\n"
+"To sort an array of size n in ascending order:\n"
+"1: Iterate from arr[1] to arr[n] over the array.\n"
+"2: Compare the current element (key) to its predecessor.\n"
+"3: If the key element is smaller than its predecessor, compare it to the elements before. Move the greater elements\n"
+"one position up to make space for the swapped element.\n"
+"\n"
+"Worst-case time complexity: O(n²)\n";
+
+const std::string quick_definiton = "Like Merge Sort, QuickSort is a Divide and Conquer algorithm. It picks an element\n"
+"as pivot and partitions the given array around\n"
+"the picked pivot. There are many different versions of quickSort that pick pivot in different ways.\n" 
+"\n"
+"    Always pick first element as pivot.\n"
+"    Always pick last element as pivot (implemented below)\n"
+"    Pick a random element as pivot.\n"
+"    Pick median as pivot.\n"
+"\n"
+"The key process in quickSort is partition(). Target of partitions is, given an array and an element x of array as pivot,\n"
+"put x at its correct position in sorted\n"
+"array and put all smaller elements (smaller than x) before x, and put all greater elements (greater than x) after x.\n"
+"All this should be done in linear time.\n"
+"\n"
+"\n"
+"Pseudo Code for recursive QuickSort function :\n" 
+"\n"
+"/* low  --> Starting index,  high  --> Ending index */\n"
+"quickSort(arr[], low, high)\n"
+"{\n"
+"    if (low < high)\n"
+"    {\n"
+"        /* pi is partitioning index, arr[pi] is now\n"
+"           at right place */\n"
+"        pi = partition(arr, low, high);\n"
+"\n"
+"        quickSort(arr, low, pi - 1);  // Before pi\n"
+"        quickSort(arr, pi + 1, high); // After pi\n"
+"    }\n"
+"}\n"
+"\n"
+"Worst-case time complexity: O(n²)\n";
+
+const std::string heap_definiton = "Heap sort is a comparison based sorting technique based on Binary Heap data structure.\n"
+"It is similar to selection sort where we first find the minimum element and place the minimum element at the beginning.\n"
+"We repeat the same process for the remaining elements.\n"
+"\n"
+"What is Binary Heap?\n"
+"Let us first define a Complete Binary Tree. A complete binary tree is a binary tree in which every level, except possibly\n"
+"the last, is completely filled, and all nodes are as far left as possible (Source Wikipedia)\n"
+"A Binary Heap is a Complete Binary Tree where items are stored in a special order such that value in a parent node is\n"
+"greater(or smaller) than the values in its two children nodes. The former is called as max heap and the latter is called\n"
+"min-heap. The heap can be represented by a binary tree or array.\n"
+"\n"
+"Why array based representation for Binary Heap?\n"
+"Since a Binary Heap is a Complete Binary Tree, it can be easily represented as an array and the array-based representation\n"
+"is space-efficient. If the parent node is stored at index I, the left child can be calculated by \n"
+"2 * I + 1 and right child by 2 * I + 2 (assuming the indexing starts at 0).\n"
+"\n"
+"Heap Sort Algorithm for sorting in increasing order:\n"
+"1. Build a max heap from the input data.\n" 
+"2. At this point, the largest item is stored at the root of the heap. Replace it with the last item of the heap followed \n"
+"by reducing the size of heap by 1. Finally, heapify the root of the tree.\n"
+"3. Repeat step 2 while size of heap is greater than 1.\n"
+"\n"
+"How to build the heap?\n"
+"Heapify procedure can be applied to a node only if its children nodes are heapified. So the heapification must be \n"
+"performed in the bottom-up order.\n"
+"\n"
+"Worst-case time complexity: O(N log N)\n";
+
+const std::string shell_definiton = "Shell Sort is mainly a variation of Insertion Sort. In insertion sort, we move elements\n"
+"only one position ahead. When an element has to be moved far ahead, many movements are involved. The idea of shellSort \n"
+"is to allow exchange of far items. In shellSort, we make the array h-sorted for a large value of h. We keep\n"
+"reducing the value of h until it becomes 1. An array is said to be h-sorted if all sublists of every h’th element is sorted\n"
+"\n"
+"Worst-case time complexity: O(n²)\n";
+
+const std::string merge_definiton = "Like QuickSort, Merge Sort is a Divide and Conquer algorithm. It divides the input array\n"
+"into two halves, calls itself for the two halves, and then merges the two sorted halves. The merge() function is used for\n"
+"merging two halves. The merge(arr, l, m, r) is a key process that assumes that arr[l..m] and\n"
+"arr[m+1..r] are sorted and merges the two sorted sub-arrays into one. Implementation is like: \n"
+"\n"
+"MergeSort(arr[], l,  r)\n"
+"If r > l\n"
+"     1. Find the middle point to divide the array into two halves:\n"
+"             middle m = l+ (r-l)/2\n"
+"     2. Call mergeSort for first half:\n"   
+"             Call mergeSort(arr, l, m)\n"
+"     3. Call mergeSort for second half:\n"
+"             Call mergeSort(arr, m+1, r)\n"
+"     4. Merge the two halves sorted in step 2 and 3:\n"
+"             Call merge(arr, l, m, r)\n"
+"\n"
+"Worst-case time complexity: O(N log N)\n";
+
+
+
+#endif

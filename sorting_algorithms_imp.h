@@ -3,6 +3,7 @@
 #include <algorithm>
 //#include "sorting_algorithms.h"
 #include "visualize.h"
+#include <unistd.h>
 
 using namespace std; 
 
@@ -16,8 +17,12 @@ using namespace std;
 //     endScreen();
 // }
 
+//string current_array;
+//stringstream ss;
+
+
 template <typename T>
-void printArray(T arr[], int size)  
+void printArray(T arr[], int size,bool is_vis)  
 {  
     int i;  
     for (i=0; i < size; i++)  
@@ -26,44 +31,94 @@ void printArray(T arr[], int size)
 }  
   
 template <typename T>
-void selectionSort(T arr, int n)  
+void selectionSort(T arr, int n,bool is_vis)  
 {  
-    int i, j, min_idx;  
-  
+    int i, j, min_idx;
+    
+    if(is_vis)
+    {
+        visPrintArray(arr,n,"Selection Sort");
+        //sleep(0.5);
+    }
     // One by one move boundary of unsorted subarray  
     for (i = 0; i < n-1; i++)  
     {  
         // Find the minimum element in unsorted array  
-        min_idx = i;  
-        for (j = i+1; j < n; j++)  
-        if (arr[j] < arr[min_idx])  
-            min_idx = j;  
-  
-        // Swap the found minimum element with the first element  
-        swap(arr[min_idx], arr[i]);  
-    }  
+        min_idx = i;
+        visSetAttr(i,0);
+        visWait();
+        for (j = i+1; j < n; j++)
+        {
+            visSetAttr(j,0);
+            visWait();
+            if (arr[j] < arr[min_idx])
+            {
+                if(min_idx != i)
+                {
+                    visRemoveAttr(min_idx);
+                }
+                
+                min_idx = j;
+                //visSetAttr(min_idx,2);
+            }
+            
+            visRemoveAttr(j);
+            if(i != min_idx)
+            {
+                visSetAttr(min_idx,2);
+            }
+            
+        }
+         
+        // Swap the found minimum element with the first element
+        swap(arr[min_idx], arr[i]);
+        visSwap(i,min_idx);
+        visPrintCurrentArray();
+    }
+    //ss.str("");
+    //std::cout << "current arr is " << current_array << "\n";
+    current_array="";
 } 
 
 template <typename T>
-void bubbleSort(T arr[], int n)  
-{  
+void bubbleSort(T arr[], int n,bool is_vis)  
+{
+    visPrintArray(arr,n,"Bubble Sort");
     int i, j;  
     for (i = 0; i < n-1; i++)      
-      
-    // Last i elements are already in place  
-    for (j = 0; j < n-i-1; j++)  
-        if (arr[j] > arr[j+1])  
-            swap(arr[j], arr[j+1]);  
+    {
+        
+        // Last i elements are already in place  
+        for (j = 0; j < n-i-1; j++)
+        {
+            visSetAttr(j,0);
+            visSetAttr(j+1,0);
+            visWait();
+            if (arr[j] > arr[j+1])
+            {
+                swap(arr[j], arr[j+1]);
+                visSwap(j,j+1);
+                
+            }
+            visPrintCurrentArray();
+            visWait();
+        }     
+    }
+    current_array="";
 } 
 
 template <typename T>
-void insertionSort(T arr[], int n) 
+void insertionSort(T arr[], int n,bool is_vis) 
 { 
     int i, j; 
     T key;
+    visPrintArray(arr,n,"Insertion Sort");
     for (i = 1; i < n; i++)
     { 
         key = arr[i]; 
+        //visVerticalLine(i);
+        visSetAttr(i,0);
+        visWait();
         j = i - 1; 
  
         /* Move elements of arr[0..i-1], that are 
@@ -74,12 +129,15 @@ void insertionSort(T arr[], int n)
             arr[j + 1] = arr[j]; 
             j = j - 1; 
         } 
-        arr[j + 1] = key; 
-    } 
+        arr[j + 1] = key;
+        visReplaceWithSpace(i,j+1); 
+    }
+
+    current_array="";
 }
 
 template <typename T>
-void merge(T arr[], int l, int m, int r)
+void merge(T arr[], int l, int m, int r,bool is_vis)
 {
     int n1 = m - l + 1;
     int n2 = r - m;
@@ -107,19 +165,24 @@ void merge(T arr[], int l, int m, int r)
     while (i < n1 && j < n2) {
         if (L[i] <= R[j]) {
             arr[k] = L[i];
+            visMergePrintElement(l+i);
             i++;
         }
         else {
             arr[k] = R[j];
+            visMergePrintElement(l+n1+j);
             j++;
         }
         k++;
+        visWait();
     }
  
     // Copy the remaining elements of
     // L[], if there are any
     while (i < n1) {
         arr[k] = L[i];
+        visMergePrintElement(l+i);
+        visWait();
         i++;
         k++;
     }
@@ -128,42 +191,112 @@ void merge(T arr[], int l, int m, int r)
     // R[], if there are any
     while (j < n2) {
         arr[k] = R[j];
+        visMergePrintElement(l+n1+j);
+        visWait();
         j++;
         k++;
     }
+    //visCrossBetween(l,r,merge_line-1);
+    //visWait();
+    visMergeReprintArray(l,r);
+    //visCrossBetween(l,r,merge_line-1);
+    //visCrossBetween(l,r,merge_line-1);
+    visWait();
 }
  
 // l is for left index and r is
 // right index of the sub-array
 // of arr to be sorted */
 template <typename T>
-void mergeSort(T arr[],int l,int r)
+void mergeSort(T arr[],int l,int r,bool is_vis)
 {
-    if(l>=r){
+    if(l>=r)
+    {
         return;//returns recursively
     }
+    if(merge_line== 0)
+    {
+        visPrintArray(arr,r+1,"Merge Sort");
+        
+    }
+    else
+    {
+        visPrintArrayToLine(merge_line);
+    }
+    visCrossBetween(l,r,merge_line);
+    visWait();
+    merge_line++;
     int m =l+ (r-l)/2;
-    mergeSort(arr,l,m);
-    mergeSort(arr,m+1,r);
-    merge(arr,l,m,r);
+    mergeSort(arr,l,m,is_vis);
+    mergeSort(arr,m+1,r,is_vis);
+    visMergeCrossVertical(m);
+    visCrossBetween(l,r,merge_line-1);
+    merge(arr,l,m,r,is_vis);
+    //visCrossBetween(l,r,merge_line-1);
+    //
+
+    if(merge_line == 0)
+    {
+        current_array = "";
+    }
 }
 
 template <typename T>
-int partition (T arr[], int low, int high) 
+int partition (T arr[], int low, int high,bool is_vis) 
 { 
-    T pivot = arr[high]; // pivot 
+    T pivot = arr[high]; // pivot
+    visCrossVertical(high);
+    visCrossVerticalToLeft(low);
+    visPrintCurrentArray();
+    visSetAttr(high,0);
+    visWait();
     int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
  
     for (int j = low; j <= high - 1; j++) 
     { 
+        visCrossVertical(high);
+        visCrossVerticalToLeft(low);
+        if(j == low)
+        {
+            visSetAttr(i+1,2);
+        } 
         // If current element is smaller than the pivot 
+        visRemoveLineBetween();
+        if(i+1 != j)
+        {
+            visAddLineBetween(i+1,j);
+            visWait();
+        }
         if (arr[j] < pivot) 
         { 
-            i++; // increment index of smaller element 
-            swap(arr[i], arr[j]); 
+            i++; // increment index of smaller element
+            
+            swap(arr[i], arr[j]);
+
+            if(i != j) 
+            {
+                visRemoveLineBetween();
+                visAddLineBetween(i,j);
+                visWait();
+                visSwap(i,j);
+                visWait();
+                //visRemoveLineBetween();
+                visPrintCurrentArray();
+                visCrossVertical(high);
+                visCrossVerticalToLeft(low);
+                //visWait();
+                visSetAttr(high,0);
+                visSetAttr(i+1,2);
+                
+            } 
         } 
     } 
-    swap(arr[i + 1], arr[high]); 
+    swap(arr[i + 1], arr[high]);
+    visRemoveLineBetween();
+    visSwap(i+1,high);
+    visWait();
+    visPrintCurrentArray();
+    visWait();
     return (i + 1); 
 } 
  
@@ -172,23 +305,30 @@ arr[] --> Array to be sorted,
 low --> Starting index, 
 high --> Ending index */
 template <typename T>
-void quickSort(T arr[], int low, int high) 
-{ 
+void quickSort(T arr[], int low, int high,bool is_vis) 
+{   
+    if(first_quick)
+    {
+        visPrintArray(arr,high+1,"Quick Sort");
+        first_quick=false;
+    }
+    
     if (low < high) 
     { 
         /* pi is partitioning index, arr[p] is now 
         at right place */
-        int pi = partition(arr, low, high); 
+        int pi = partition(arr, low, high,is_vis);
+        
  
         // Separately sort elements before 
         // partition and after partition 
-        quickSort(arr, low, pi - 1); 
-        quickSort(arr, pi + 1, high); 
+        quickSort(arr, low, pi - 1,is_vis); 
+        quickSort(arr, pi + 1, high,is_vis); 
     } 
 }
 
 template <typename T>
-void heapify(T arr[], int n, int i)
+void heapify(T arr[], int n, int i,bool is_vis)
 {
     int largest = i; // Initialize largest as root
     int l = 2 * i + 1; // left = 2*i + 1
@@ -207,31 +347,35 @@ void heapify(T arr[], int n, int i)
         swap(arr[i], arr[largest]);
  
         // Recursively heapify the affected sub-tree
-        heapify(arr, n, largest);
+        heapify(arr, n, largest,is_vis);
     }
 }
  
 // main function to do heap sort
 template <typename T>
-void heapSort(T arr[], int n)
+void heapSort(T arr[], int n,bool is_vis)
 {
+    visPrintArray(arr,n,"Heap Sort");
     // Build heap (rearrange array)
     for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
+        heapify(arr, n, i,is_vis);
  
     // One by one extract an element from heap
-    for (int i = n - 1; i > 0; i--) {
+    for (int i = n - 1; i > 0; i--) 
+    {
         // Move current root to end
         swap(arr[0], arr[i]);
  
         // call max heapify on the reduced heap
-        heapify(arr, i, 0);
+        heapify(arr, i, 0,is_vis);
     }
 }
 
 template <typename T>
-void shellSort(T arr[], int n) 
+void shellSort(T arr[], int n,bool is_vis) 
 { 
+    visPrintArray(arr,n,"Shell Sort");
+    bool is_changed;
     // Start with a big gap, then reduce the gap 
     for (int gap = n/2; gap > 0; gap /= 2) 
     { 
@@ -241,6 +385,7 @@ void shellSort(T arr[], int n)
         // gap sorted  
         for (int i = gap; i < n; i += 1) 
         { 
+            is_changed = false;
             // add a[i] to the elements that have been gap sorted 
             // save a[i] in temp and make a hole at position i 
             T temp = arr[i]; 
@@ -248,14 +393,35 @@ void shellSort(T arr[], int n)
             // shift earlier gap-sorted elements up until the correct  
             // location for a[i] is found 
             int j;             
-            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) 
-                arr[j] = arr[j - gap]; 
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)
+            {
+                is_changed = true;
+                visAddLineBetween(j-gap,j);
+                visSetAttr(j,2);
+                visSetAttr(j-gap,2);
+                visWait();
+                arr[j] = arr[j - gap];
+                visSwap(j-gap,j);
+                visPrintCurrentArray();
+                visRemoveLineBetween();
+            }
+
+            if(!is_changed)
+            {
+                visAddLineBetween(j-gap,j);
+                visSetAttr(j,2);
+                visSetAttr(j-gap,2);
+                visWait();
+                visPrintCurrentArray();
+                visRemoveLineBetween();
+            }
               
             //  put temp (the original a[i]) in its correct location 
             arr[j] = temp; 
         } 
     } 
-    //return 0; 
+    //return 0;
+    current_array="";
 }
 
 // template <typename T>

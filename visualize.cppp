@@ -7,3 +7,8 @@ void startScreen()
 {
 	initscr();
 }
+
+void endScreen()
+{
+	initscr();
+}
