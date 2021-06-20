@@ -32,6 +32,7 @@ void shellSort(T arr, int n,bool is_vis);
 
 #include "sorting_algorithms_imp.h"
 #include "visualize.h"
+#include "vis_op.h"
 
 
 

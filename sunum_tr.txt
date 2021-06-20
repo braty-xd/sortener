@@ -1,0 +1,45 @@
+//Plan
+Hepinize merhabalar. Bugün size bitirme projem olan sortener'ı anlatacağım. İlk olarak bir giriş ve tanım yaptıktan sonra size terminal programları ile ilgili bilgi vereceğim. Ondan sonra geliştirmiş olduğum programı diğer programlarla kıyaslayıp farklarını anlatacağım. Son olarak da uygulamanın nasıl çalıştığını gösterdikten sonra sorularınızı kabul edeceğim.
+
+//Program Sortener
+Sortener sıralama algoritmalarını görselleştiren, tanımlayan ve onları karşılaştırmamızı sağlayan çok amaçlı bir terminal programı. Program dosyadan veri okutmayı veya veri vermemizi, animasyon hızını ayarlamamızı, sıralama kriterini belirlememizi ve daha bir çok farklı özelliği sağlıyor. Bir program olması nedeniyle de sunumumu programın çalışma aşamalarını içeren bir demo üzerinden gerçekleştireceğim. Ama ondan önce neden böyle bir proje seçtiğimi, projenin kapsamını ve bu projenin diğer benzer amacı taşıyan programlarla nasıl kıyaslandığını anlatmak isterim. Özellikle neden bir terminal programı seçtiğimden ve bunun nasıl bir avantaj sağlayacağından bahsedeceğim öncelikle.
+
+//Tanıtım
+Terminal programları, özellikle linux gibi unix-like işletim sistemleri kullanan kullanıcılar için vazgeçilmez araçlardır.Sistem adminlerinden tutun network uzmanlarına, veri tabanı ile ilgilenenlerden siber güvenlik görevlilerine çoğu bilişim ile uğraşan kişinin günlük olarak kullandığı bir sürü program vardır. Bunların en temel örnekleri nmap, curl, awk, sed gibi programlardır ve örnekler fazlasıyla çoğaltılabilir. Bu programların ortak özelliği ise çok çeşitli ve çok sayıda parametre alabilmesi, kullanıcının bu parametreleri istediği gibi ayarlarıp kesin olarak istediği sonucu elde edebilmesidir. Terminal programı olmaları nedeniyle de çok daha fazla konfigüre edilebilirler. Grafiksel bir arayüz kullanarak ayarlanması mümkün olmayan veya daha karmaşık olan komut kombinasyonları, terminal programları ile tek bir satırda elde edilebilir. Program grafiksel bir arayüz içermediğinden programın geliştirilebilmesi çok daha kolaydır ve tamamen amaca odaklanmanızı sağlar. Sortener ise bu anlattığım özelliklere uyan bir terminal programıdır. Sahip olduğu bir çok parametre ile kullanıcının istediği gibi ayarlanabilen, yapılan sıralamayı görselleştiren, tanımlarını veren, onları karşılaştıran ve daha bir çok özelliği bir arada veya ayrı ayrı yapabilmemizi sağlayan bir programdır.
+
+//Piyasa araştırması ve diğer programlar
+Peki bu programa alternatif olarak başka hangi programlar var. Web üzerinden çeşitli görselleştirme yapan siteler bulmak mümkün. Ancak çoğu kişinin anlayabileceği bir görselleştirme yapmak yerine sütunlar aracılığıyla ve görece hızlı bir görselleştirme yapmayı tercih ediyor. Bunun yanında grafiksel bir arayüze sahip olmasıyla birlikte çok daha az konfigüre edilebilir bir yapıya sahipler. Bunun haricinde benzer amacı taşıyan farklı terminal programlarını incelediğimizde yine hem programların daha az parametre içermesi, hem yeterli görselliği içermemesi bakımından yeterli özelliklere sahip olmadığını görebiliriz. İlgili programlardan kastım ise web uygulamaları ve çeşitli github ve gitlab repoları. Bunları ayrı ayrı incelediğimde ise hepsinin geliştirmekte olduğum programdan farklı eksiklerini tespit ettim. Örnek olarak şekil 1'de bahsedilen programlardan biri şekildeki gifi sağlasa da parametreler aracılığı ile konfigüre edilemez ve kullanıcı şekildeki gifi anlamayabilir. Program parametre almadan çalışır ve şekildeki gifi ortaya çıkarır. Örnek 2'deki program ise bir web uygulaması tarafından oluşturulan bir animasyondur ve sadece 1 ile 8 arasındaki sayıların sıralanmasını gösterir. Erişim için bir grafiksel arayüz gerektirir ve herhangi başka bir veriyi sıralamak veya tanım vermek için kullanılamaz.
+
+
+Neden böyle bir program seçtiğimi, programın amacını ve diğer programlara göre karşılaştırmasını anlattıktan sonra şimdi de programı uygulamalı olarak göstermek istiyorum.
+(Change to github)
+Program açık kaynak kodlu ve gördüğünüz github reposundan kolayca elde edilebilir. Gördüğünüz dökümantasyonda kodun nasıl indirilip derleneceğinden programın çeşitli kullanım özelliklerine kadar her şey örneklendirilerek anlatılıyor. Programı şekildeki komutu kullanıp indirebiliriz. İndirme tamamlandıktan sonra yine bu komut ile programı kurup PATH değişkenine ekleyebiliriz. Programın bir makefile içermesi kullanıcı için de kurulum kolaylığı sağlamaktadır. Programın kullanımına geçecek olursak, program bir parametre almadan çalışınca bize yardım almak için help parametresi ile çalıştırmamızı öneriyor. Help parametresi ile çalıştırınca ise şekildeki gibi hangi parametrelerin nasıl kullanılması gerektiğini görebiliyoruz. Bunların detaylandırılmış halini ise github sayfasındaki dökümantasyonda görebiliyoruz.
+
+// tanımını gösterme
+sortener --definition merge
+
+// basit sıralama görselleme gösterme
+sortener --sort-by bubble --array 20,60,40,80,10,70,30,50 --visualize
+
+// hız değiştirmeyi gösterme
+sortener --sort-by quick --array 20,60,40,80,10,70,30,50 --visualize --speed 0.5
+
+// dosya ile sıralamayı gösterme
+cat trys/number_newline.txt
+sortener --sort-by selection --file trys/number_newline.txt --visualize
+
+// dosya seperator gösterme
+cat trys/number_space.txt
+sortener --sort-by insertion --file trys/number_space.txt --visualize --seperator ' '
+
+// dosya string gösterme
+cat trys/word_newline.txt
+sortener --sort-by bubble --file trys/word_newline.txt --string --visualize
+
+// example-compare gösterme
+sortener --sort-by selection,insertion,bubble,merge,quick,heap,shell --example 1 --compare
+
+// save gösterme
+sortener --sort-by bubble --array 20,60,40,80,10,70,30,50  --save a1
+
+// diğer projelerle kıyaslama
