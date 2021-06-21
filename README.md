@@ -7,7 +7,8 @@ To install it, you should have g++ and make programs.
 # Installation
 
 run ```
-git clone https://github.com/braty-xd/sortener.git 
+git clone https://github.com/braty-xd/sortener.git```
+and ```
 sudo make install```
 
 After installing it using makefile, you can use to --help to get:
