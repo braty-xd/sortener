@@ -13,33 +13,32 @@ sudo make install```
 
 After installing it using makefile, you can use to --help to get:
 
-
-by running --help you can get Usage: sortener [OPTION]... [FILE/ARRAY]
+Usage: sortener [OPTION]... [FILE/ARRAY]\
 Sortener is a program for visualizing the most commonly known sorting algorithms
 
---sort-by ALGORITHM...          Select the sorting algorithms to use
---file FILE                     Give a file to sort
---array ARRAY                   Give an array to sort
---string                        Sorts given file/array alphanumerically. By default only sorts numbers
---seperator                     When reading given file, it seperates elements by given character. Default is new line '\n' character
---visualize                     Puts visual output of provided sortings for given file/array
---speed SPEED                   Speeds up the visual output
---definition ALGORITHM...       Gives the definiton of the sorting algorithms
---save FILE                     After sorting given array, saves the sorted version in a new file
---help                          Shows help page
---compare                       Compares sorting times
+--sort-by ALGORITHM...          Select the sorting algorithms to use\
+--file FILE                     Give a file to sort\
+--array ARRAY                   Give an array to sort\
+--string                        Sorts given file/array alphanumerically. By default only sorts numbers\
+--seperator                     When reading given file, it seperates elements by given character. Default is new line '\n' character\
+--visualize                     Puts visual output of provided sortings for given file/array\
+--speed SPEED                   Speeds up the visual output\
+--definition ALGORITHM...       Gives the definiton of the sorting algorithms\
+--save FILE                     After sorting given array, saves the sorted version in a new file\
+--help                          Shows help page\
+--compare                       Compares sorting times\
 --example EXAMPLE               Uses pre data sets for sorting.
 
 --sort-by and --definiton options takes available sorting algorithms as argument.
 
 Available sorting algortihms:
 
-Bubble
-Selection
-Insertion
-Quick
-Merge
-Heap
+Bubble\
+Selection\
+Insertion\
+Quick\
+Merge\
+Heap\
 Shell
 
 # Usage Examples
